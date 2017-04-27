@@ -4,6 +4,7 @@ The framework was wrapped with a graphical user interface to facilitate real-wor
 
 # Dependencies
 The dependencies are packaged in the lib folder.
+You would need to register for fatsecretPlatform API and obtain Consumer Key and Shared Secret to be able to run the code. See https://platform.fatsecret.com/api/Default.aspx?screen=rapiauth
 
 # Related publications
 Several parts of the code are reported in the following publications:
