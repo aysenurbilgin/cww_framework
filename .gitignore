@@ -2,7 +2,7 @@
 *.class
 *.iml
 .idea
-img/
+img/*
 build/
 out/
 dist/

@@ -161,19 +161,6 @@ public class LGT2Designer_Expert {
 
     }
 
-    public void visualizeLeftShoulder() {
-        this.leftShoulder.visualizeSets(this.linguisticData.getNegPerception(), "expert");
-    }
-
-    public void visualizeRightShoulder() {
-        this.rightShoulder.visualizeSets(this.linguisticData.getPosPerception(), "expert");
-    }
-
-    public void visualizeLV() {
-        visualizeLeftShoulder();
-        visualizeRightShoulder();
-    }
-
     public int getNumberOfSlices() {
         return this.numberOfSlices;
     }

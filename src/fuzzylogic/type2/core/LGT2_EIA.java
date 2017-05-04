@@ -71,32 +71,6 @@ public class LGT2_EIA {
         this.rightShoulder =  new zSliceLGT2(posPerception, allEIAData, numberOfSlices, "right");
     }
     
-    public void visualizeLeftShoulder() {
-        this.leftShoulder.visualizeSets(negPerception, "expert");
-    }
-
-    public void visualizeLeftShoulderEIA() {
-        this.leftShoulder.visualizeSets(negPerception, "EIA");
-    }
-
-    public void visualizeRightShoulder() {
-        this.rightShoulder.visualizeSets(posPerception, "expert");
-    }
-
-    public void visualizeRightShoulderEIA() {
-        this.rightShoulder.visualizeSets(posPerception, "EIA");
-    }
-
-    public void visualizeLV() {
-        visualizeLeftShoulder();
-        visualizeRightShoulder();
-    }
-
-    public void visualizeLVEIA() {
-        visualizeLeftShoulderEIA();
-        visualizeRightShoulderEIA();
-    }
-    
     public int getNumberOfSlices() {
         return LGT2_EIA.numberOfSlices;
     }

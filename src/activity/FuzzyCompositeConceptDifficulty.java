@@ -22,7 +22,6 @@ import fuzzylogic.type2.core.LVDesignerExpert;
 import fuzzylogic.type2.interval.IntervalT2MF_Trapezoidal;
 import fuzzylogic.type2.zSlices.AgreementEngine;
 import fuzzylogic.type2.zSlices.AgreementMF_zMFs;
-import fuzzylogic.type2.zSlices.GenT2zUtility_FileWriter;
 import gui.Utility;
 
 import java.io.File;
@@ -522,49 +521,7 @@ public class FuzzyCompositeConceptDifficulty extends Word implements Serializabl
         AgreementMF_zMFs agreement_very_right = aE.findAgreement("very "+labels[1], interval_very_right);
         AgreementMF_zMFs agreement_extremely_right = aE.findAgreement("extremely "+labels[1], interval_extremely_right);
 
-        visualizeSets("extremely_"+labels[0], "_it2", agreement_extremely_left);
-        visualizeSets("very_"+labels[0], "_it2", agreement_very_left);
-        visualizeSets(labels[0], "_it2", agreement_left);
-        visualizeSets(labels[1], "_it2", agreement_right);
-        visualizeSets("very_"+labels[1], "_it2", agreement_very_right);
-        visualizeSets("extremely_"+labels[1], "_it2", agreement_extremely_right);
-
         return new AgreementMF_zMFs[]{agreement_extremely_left, agreement_very_left, agreement_left, agreement_right, agreement_very_right, agreement_extremely_right};
-
-    }
-
-    private void visualizeSets(String filename, String addString, AgreementMF_zMFs agreementSet) {
-
-        GenT2zUtility_FileWriter zFW = new GenT2zUtility_FileWriter();
-        String[] colors = { "[1 0.8 0.4]", "[1 0 1]", "[0 1 1]", "[1 0 0]", "[0 1 0]", "[0 0 1]" }; //yellow to white
-        zFW.setMatlabColors(colors);
-
-        String foldername = "";
-
-        if (addString.equalsIgnoreCase("preparation time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"preptime" + File.separator;
-        }
-        else if (addString.equalsIgnoreCase("cooking time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"cooktime" + File.separator;
-        }
-        else if (addString.equalsIgnoreCase("overall time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"overall" + File.separator;
-        }
-        else {
-            foldername = Utility.foldername + "visuals"+ File.separator+"diff" + File.separator;
-
-        }
-
-        File files = new File(foldername);
-        if (!files.exists()) {
-            if (files.mkdirs()) {
-                System.out.println("IT2: Multiple directories are created!");
-            } else {
-                System.out.println("IT2: Failed to create multiple directories!");
-            }
-        }
-
-        zFW.writeMatlabSquareTesselation(agreementSet, foldername + filename + addString + ".m", 100, 1.0, true);
 
     }
     
@@ -649,7 +606,6 @@ public class FuzzyCompositeConceptDifficulty extends Word implements Serializabl
         }
         
         composite.formZsliceSets();
-        composite.visualizeLV();
         
         this.compositeConceptSets = composite.getFuzzySets();
         this.established = true;
@@ -732,7 +688,6 @@ public class FuzzyCompositeConceptDifficulty extends Word implements Serializabl
         }
 
         composite.formZsliceSets();
-        composite.visualizeLV();
 
         this.compositeConceptSets = composite.getFuzzySets();
         this.established = true;

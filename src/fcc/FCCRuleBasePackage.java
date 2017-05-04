@@ -42,27 +42,6 @@ public class FCCRuleBasePackage implements Serializable {
         return finalrulebase;
     }
 
-    public String addRule(RuleAntecedentGroup newRAG, RuleConsequentGroup newRCG) {
-
-        StringBuilder message;
-
-        synchronized (finalrulebase) {
-            ArrayList<RuleConsequentGroup> rcglist;
-            rcglist = finalrulebase.get(newRAG);
-            if (rcglist == null) {  
-                rcglist = new ArrayList<RuleConsequentGroup>();
-            }
-
-            rcglist.add(newRCG);
-            finalrulebase.put(newRAG, rcglist);
-            
-        }
-
-        message = (new StringBuilder("ADDING NEW PREFERENCE..")).append(newRAG.toString()).append("; the ").append(newRCG.toString()).append(".");
-
-        return message.toString();
-    }
-
     //september 2013 adding overall time
     public void doLearning(double overalltime, ArrayList<AgreementMF_zMFs> feedbackSets, String compositeOutput, ArrayList<AgreementMF_zMFs[]> inputconceptSets, ArrayList<String> conceptNames, AgreementMF_zMFs outputConceptSet) {
 

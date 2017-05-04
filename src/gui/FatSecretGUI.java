@@ -959,10 +959,10 @@ public class FatSecretGUI extends JFrame implements ItemListener, ActionListener
 
             if (!Utility.usingIntervalT2) {
 
-                Utility.foldername = "." + File.separator + "LGT2_experiments_EIA" + File.separator + Utility.USER_NAME + File.separator;
+                Utility.foldername = "." + File.separator + "LGT2_experiments" + File.separator + Utility.USER_NAME + File.separator;
             }
             else {
-                Utility.foldername = "."+ File.separator+"IT2_experiments_EIA"+File.separator+ Utility.USER_NAME + File.separator;
+                Utility.foldername = "."+ File.separator+"IT2_experiments"+File.separator+ Utility.USER_NAME + File.separator;
             }
 
             Utility.PUBLIC_BASE.init(username.getText());

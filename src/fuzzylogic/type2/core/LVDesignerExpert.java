@@ -154,19 +154,6 @@ public class LVDesignerExpert {
         this.rightShoulder = new zSliceLGT2(posPerception, (Map<Object, Resource>) ((Object)rightorderedGranules), lowerRight, upperRight, numberOfSlices, "right", reduceComplexity);
     }
     
-    public void visualizeLeftShoulder() {
-        this.leftShoulder.visualizeSets(negPerception, "expert");
-    }
-
-    public void visualizeRightShoulder() {
-        this.rightShoulder.visualizeSets(posPerception, "expert");
-    }
-    
-    public void visualizeLV() {
-        visualizeLeftShoulder();
-        visualizeRightShoulder();
-    }
-    
     public int getNumberOfSlices() {
         return LVDesignerExpert.numberOfSlices;
     }

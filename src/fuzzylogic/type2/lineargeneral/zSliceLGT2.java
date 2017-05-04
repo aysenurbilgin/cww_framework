@@ -8,22 +8,21 @@
  */
 package fuzzylogic.type2.lineargeneral;
 
-import fuzzylogic.generic.*;
+import fuzzylogic.generic.Resource;
+import fuzzylogic.generic.Slice;
+import fuzzylogic.generic.Tuple;
+import fuzzylogic.generic.VerticalSlice;
 import fuzzylogic.type1.T1MF_Trapezoidal;
-import fuzzylogic.type1.core.T1Interface;
 import fuzzylogic.type1.core.TrapezoidMF;
 import fuzzylogic.type2.core.EIAData;
 import fuzzylogic.type2.core.MembershipFunction;
 import fuzzylogic.type2.interval.IntervalT2MF_Trapezoidal;
 import fuzzylogic.type2.zSlices.AgreementEngine;
 import fuzzylogic.type2.zSlices.AgreementMF_zMFs;
-import fuzzylogic.type2.zSlices.GenT2zUtility_FileWriter;
-import gui.Utility;
 
-import java.io.File;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -401,17 +400,11 @@ public class zSliceLGT2 extends MembershipFunction  {
         if (o instanceof Double) {
             return getVerticalSlice((Double) o);
         }
-        else {
-            return getTiltedSlice((T1Interface) o);
-        }
+        return null;
     }
 
     private VerticalSlice getVerticalSlice(double x) {
         return new VerticalSlice(this.getLower(x), this.getUpper(x), x);   
-    }
-
-    private TiltedSlice getTiltedSlice(T1Interface nsinput) {
-        return new TiltedSlice(this.lower.getMembershipDegree(nsinput), this.upper.getMembershipDegree(nsinput));
     }
 
     @Override
@@ -420,9 +413,7 @@ public class zSliceLGT2 extends MembershipFunction  {
         if (s instanceof VerticalSlice) {
             return getVSecondaryDegree((VerticalSlice) s);
         }
-        else {
-            return getTSecondaryDegree((TiltedSlice) s);
-        }
+        return 0;
 
     }
 
@@ -498,78 +489,6 @@ public class zSliceLGT2 extends MembershipFunction  {
         //step2
         return y*Math.sin(confidenceAngle*Math.PI/180);
         
-    }  
-
-    private double getTSecondaryDegree(TiltedSlice ts) {
-        
-        double z = 0;
-        double lowerx = ts.getLowerX();
-        double lowery = ts.getLowerY();
-        double upperx = ts.getUpperX();
-        double uppery = ts.getUpperY();
-        
-        if ((Double.compare(lowery, uppery) == 0.0) && uppery == 0) {
-            return z;
-        }
-        //step1
-        //for the same upper and lower membership degrees, we need to differentiate linearly
-        if ((Double.compare(lowerx, upperx) == 0) && (Double.compare(lowery, uppery) == 0.0)) {
-
-            if (this.upper.isLeftShoulder() && this.lower.isLeftShoulder()) {
-                //descending linear
-                z = (this.upper.getPoints()[2] - lowerx)/(this.upper.getPoints()[2] - this.upper.getPoints()[1]);
-            }
-            else if (this.upper.isRightShoulder() && this.lower.isRightShoulder()) {
-                //ascending linear
-                z = (lowerx - this.upper.getPoints()[1])/(this.upper.getPoints()[2] - this.upper.getPoints()[1]);
-            }       
-        }
-        else {
-            //the upper and lower membership degrees are different
-            //we are dealing with the FOU so the tilted slice is either a perpendicular triangle (right for right shoulder and left for left shoulder)
-            //or a trapezoid - cut off head of the triangle as above, same conditions still apply for right and left
-            //we want to find the center of gravity of the tilted slice, namely the centroid, for secondary degree
-            //find the base of the triangle and the upper base of the trapezoid depending on the boundaries of the UMF and LMF
-            //for tilted slice the values of points are changing so we need the distance between two points to carry the calculations
-            double upperbase = 0, lowerbase = 0;
-            
-            if (this.upper.isLeftShoulder() && this.lower.isLeftShoulder()) {
-                //descending linear
-                
-                double horizontalFOU = this.upper.getPoints()[2] - this.lower.getPoints()[2];
-                
-                //calculate lowerbase of both triangle and trapezoid
-                lowerbase = horizontalFOU/(this.upper.getPoints()[2] - this.upper.getPoints()[1]);
-                        
-                //check the boundaries of UMF and LMF in order to calculate upperbase
-                if (upperx < this.upper.getPoints()[2] && upperx > this.lower.getPoints()[2]) {
-                    upperbase = ((this.upper.getPoints()[2] - upperx)/horizontalFOU) * lowerbase;
-                }
-                
-                z = ts.calculateCentroid(lowerbase, upperbase);
-
-            }
-            else if (this.upper.isRightShoulder() && this.lower.isRightShoulder()) {
-                //ascending linear
-                
-                double horizontalFOU = this.lower.getPoints()[1] - this.upper.getPoints()[1];
-                
-                //calculate lowerbase of both triangle and trapezoid
-                lowerbase = horizontalFOU/(this.upper.getPoints()[2] - this.upper.getPoints()[1]);
-                        
-                //check the boundaries of UMF and LMF in order to calculate upperbase
-                if (upperx > this.upper.getPoints()[1] && upperx < this.lower.getPoints()[1]) {
-                    upperbase = ((upperx - this.upper.getPoints()[1])/horizontalFOU)* lowerbase;
-                }
-                
-                z = ts.calculateCentroid(lowerbase, upperbase);
-            }
-            
-        }
-
-        //step2
-        return z*Math.sin(confidenceAngle*Math.PI/180);
-        
     }
     
     public AgreementMF_zMFs getAgreementSets()
@@ -580,55 +499,6 @@ public class zSliceLGT2 extends MembershipFunction  {
     public IntervalT2MF_Trapezoidal[][] getIntervalT2Sets()
     {
         return new IntervalT2MF_Trapezoidal[][]{intervalSets};
-    }
-
-    public synchronized void visualizeSets(String filename, String addString) {
-
-//        System.out.println("zSLICELGT2:: Add string is : " + addString);
-        GenT2zUtility_FileWriter zFW = new GenT2zUtility_FileWriter();
-        //String[] colors = { "[1 1 0]", "[1 0 1]", "[0 1 1]", "[1 0 0]", "[0 1 0]", "[0 0 1]", "[1 1 1]" }; //yellow to white
-        String[] colors = { "[1 0.8 0.4]", "[1 0 1]", "[0 1 1]", "[1 0 0]", "[0 1 0]", "[0 0 1]" }; //yellow to white
-        
-        //String[] colors = MatlabSupportTools.generateColorFades(agreementSet.getNumberOfSlices(), new double[]{1.0,0.4,0.6},new double[]{0.8,0.2,0.8});
-        //String[] colors = MatlabSupportTools.generateColorFades(intervalSets.length, new double[]{1.0,0.1,0.1},new double[]{0.2,0.2,0.9});
-        
-        zFW.setMatlabColors(colors);
-        
-        String foldername = "";
-
-        if (addString.equalsIgnoreCase("preparation time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"preptime" + File.separator;
-        }
-        else if (addString.equalsIgnoreCase("cooking time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"cooktime" + File.separator;
-        }
-        else if (addString.equalsIgnoreCase("zoverall time")) {
-            foldername = Utility.foldername + "visuals"+ File.separator+"overall" + File.separator;
-        }
-        else {
-            foldername = Utility.foldername + "visuals"+ File.separator+"diff" + File.separator;
-
-        }
-        
-
-        //add timestamp
-        Calendar cal = new GregorianCalendar();
-        Format formatter = new SimpleDateFormat("MMddHHmmss");
-        String timestamp = formatter.format(cal.getTime()).toString();
-        
-        File files = new File(foldername);
-	if (!files.exists()) {
-		if (files.mkdirs()) {
-			System.out.println("zSLICELGT2: Multiple directories are created!");
-		} else {
-			System.out.println("zSLICELGT2: Failed to create multiple directories!");
-		}
-	}
-        
-        zFW.writeMatlabSquareTesselation(agreementSet, foldername + "a" + timestamp + filename +addString + ".m", 100, 1.0, true);
-
-//        System.out.println("zSliceLGT2: Sets should have been written!");
-
     }
     
     public int getRealNumberofSlices() {

@@ -398,27 +398,6 @@ public class FCCDesignerSD implements Serializable {
         }
         return a;
     }
-
-    
-    public void visualizeLeftShoulder() {
-        
-        for (int i = 0; i < this.numberofconcepts; i++) {
-            this.leftShoulder.get(i).visualizeSets(leftShoulder.get(i).getLinguisticLabel(), "single"+i);
-        }
-    }
-
-    public void visualizeRightShoulder() {
-        
-        for (int i = 0; i < this.numberofconcepts; i++) {
-            this.rightShoulder.get(i).visualizeSets(rightShoulder.get(i).getLinguisticLabel(), "single"+i);
-        }
-    }
-    
-    public void visualizeLV() {
-        visualizeLeftShoulder();
-        visualizeRightShoulder();
-    }
-    
     
     public void reorganizeToAdapt(String variableName, double newvalue) {
         
