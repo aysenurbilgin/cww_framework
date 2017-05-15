@@ -276,13 +276,15 @@ public class FatSecretSketch extends PApplet {
                     if (!difficultyPrintedOnce) {
 
                         if (Utility.usingIntervalT2 || Utility.usingLGT2_EIA) {
-                            String inputs = JOptionPane.showInputDialog(frame, "Prep Time, Cook Time?");
-                            String inp[] = inputs.split(",");
+//                            String inputs = JOptionPane.showInputDialog(frame, "Prep Time, Cook Time?");
+//                            String inp[] = inputs.split(",");
 
                             //according to new EIA the mfs are in domain [0,10]
                             //hence need to normalize the inputs by dividing with 10
-                            Utility.ALLRECIPES.get(currentRecipe).setPreparationTime(Double.parseDouble(inp[0]) / 10.0);
-                            Utility.ALLRECIPES.get(currentRecipe).setCookingTime(Double.parseDouble(inp[1]) / 10.0);
+//                            Utility.ALLRECIPES.get(currentRecipe).setPreparationTime(Double.parseDouble(inp[0]) / 10.0);
+                            Utility.ALLRECIPES.get(currentRecipe).setPreparationTime(Utility.ALLRECIPES.get(currentRecipe).getPreparationTime() / 10.0);
+//                            Utility.ALLRECIPES.get(currentRecipe).setCookingTime(Double.parseDouble(inp[1]) / 10.0);
+                            Utility.ALLRECIPES.get(currentRecipe).setCookingTime(Utility.ALLRECIPES.get(currentRecipe).getCookingTime() / 10.0);
 
                             System.out.println("Recipe is : " + Utility.ALLRECIPES.get(currentRecipe).toString());
                         } else {

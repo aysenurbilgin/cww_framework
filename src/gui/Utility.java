@@ -55,9 +55,9 @@ public class Utility {
     public static Case queryCase = new Case();
     public static final String maxResult = "10";
 
-    public static  boolean usingIntervalT2 = false;
+    public static  boolean usingIntervalT2 = true;
     public static  boolean usingLGT2_EIA = false;
-    public static  boolean usingLGT2_optimised = true;
+    public static  boolean usingLGT2_optimised = false;
     public static boolean loginSuccessful = false;
 
     //september 2013 new changes for the sets not to be deconstructed
